@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="popup.css"><title>Smart Ticket Assistant</title></head>
+<body>
+  <main class="panel">
+    <header><span class="mark">✦</span><div><h1>Smart Ticket</h1><p>用户控制的购票辅助</p></div><span id="connection" class="dot" title="页面状态"></span></header>
+    <section class="status-card"><div><span>当前状态</span><strong id="pageStatus">正在连接…</strong></div><div><span>停留时间</span><strong id="elapsed">—</strong></div><div><span>可购买票</span><strong id="availability">未检测</strong></div></section>
+    <label>目标活动<input id="eventName" placeholder="例如：演唱会名称"></label>
+    <label>优先区域 <textarea id="priorityAreas" rows="2" placeholder="VIP中央&#10;VIP侧边"></textarea><small>每行一个区域，按顺序匹配</small></label>
+    <label>备选区域 <textarea id="fallbackAreas" rows="2" placeholder="R席&#10;A区"></textarea></label>
+    <div class="grid"><label>购买数量<select id="quantity"><option>1</option><option>2</option><option>3</option></select></label><label>指定排数<div class="range"><input id="rowStart" type="number" min="1" placeholder="5"><b>–</b><input id="rowEnd" type="number" min="1" placeholder="15"></div></label></div>
+    <fieldset><legend>优先策略</legend><label><input name="strategy" value="stage" type="radio"> 最近舞台</label><label><input name="strategy" value="center" type="radio" checked> 中间位置</label><label><input name="strategy" value="contiguous" type="radio"> 连座优先</label></fieldset>
+    <div class="grid settings-grid"><label>点击等待时间<select id="waitTime"><option value="400">0.4 秒</option><option value="800">0.8 秒</option><option value="1200">1.2 秒</option><option value="1800">1.8 秒</option></select></label><label class="toggle"><input id="autoClick" type="checkbox"><span></span> 自动点击匹配区域</label></div>
+    <label class="toggle"><input id="testMode" type="checkbox" checked><span></span> 测试模式：只识别，不点击</label>
+    <label class="toggle"><input id="debugMode" type="checkbox"><span></span> 调试模式：在页面显示识别元素</label>
+    <p class="notice">不会绕过排队、验证码、登录安全或支付流程。</p>
+    <div class="actions"><button id="start" class="primary">开始监控</button><button id="pause">暂停</button><button id="logs">查看日志</button></div>
+    <div class="analysis-actions"><button id="scanMap">开始扫描座位图</button><button id="exportAnalysis">导出分析结果</button></div>
+    <p id="analysisNotice" class="analysis-notice" aria-live="polite"></p>
+    <section id="logPanel" hidden><h2>最近操作</h2><ol id="logList"></ol></section>
+  </main><script src="../shared/constants.js"></script><script src="popup.js"></script>
+</body></html>
