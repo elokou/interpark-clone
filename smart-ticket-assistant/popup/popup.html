@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="popup.css"><title>Smart Ticket Assistant</title></head>
+<body>
+  <main class="panel">
+    <header><span class="mark">✦</span><div><h1>Smart Ticket</h1><p>用户控制的购票辅助</p></div><span id="connection" class="dot" title="页面状态"></span></header>
+    <section class="status-card"><div><span>当前状态</span><strong id="pageStatus">正在连接…</strong></div><div><span>停留时间</span><strong id="elapsed">—</strong></div><div><span>可购买票</span><strong id="availability">未检测</strong></div></section>
+    <section class="scan-stats"><span>当前模式 <strong id="currentProfile">平衡模式</strong></span><span>正在扫描区域 <strong id="currentArea">—</strong></span><span>当前间隔 <strong id="currentInterval">—</strong></span><span>最后检测 <strong id="lastScanAt">—</strong></span><span>累计扫描 <strong id="scanCount">0</strong></span><span>页面变化 <strong id="pageChangeCount">0</strong></span></section>
+    <label>目标活动<input id="eventName" placeholder="例如：演唱会名称"></label>
+    <label>目标区域 <textarea id="priorityAreas" rows="2" placeholder="VIP中央&#10;VIP侧边"></textarea><small>每行一个区域，按顺序匹配</small></label>
+    <label>区域优先级/备选 <textarea id="fallbackAreas" rows="2" placeholder="按行添加低优先级区域"></textarea></label>
+    <label>排除区域 <textarea id="excludedAreas" rows="2" placeholder="每行一个不参与推荐的区域"></textarea></label>
+    <section class="template-card"><div class="template-heading"><strong>场次区域模板</strong><select id="templateSelect"><option value="">新建模板</option></select></div><label>模板名称<input id="templateName" placeholder="例如：ENHYPEN Busan"></label><div class="template-grid"><label>内场<textarea id="templateFloor" rows="2" placeholder="Floor&#10;Standing&#10;VIP"></textarea></label><label>一层<textarea id="templateFirst" rows="2" placeholder="1F&#10;Lower"></textarea></label><label>二层<textarea id="templateSecond" rows="2" placeholder="2F"></textarea></label><label>三层<textarea id="templateThird" rows="2" placeholder="3F&#10;Upper"></textarea></label></div><div class="template-actions"><button id="saveTemplate" type="button">保存模板</button><button id="deleteTemplate" type="button">删除</button><button id="exportTemplates" type="button">导出 JSON</button><label class="file-button">导入 JSON<input id="importTemplates" type="file" accept="application/json"></label></div><p id="templateNotice" class="analysis-notice"></p></section>
+    <fieldset><legend>购票范围</legend><label><input class="ticket-grade" type="checkbox" value="VIP"> VIP</label><label><input class="ticket-grade" type="checkbox" value="R"> R</label><label><input class="ticket-grade" type="checkbox" value="S"> S</label><label><input class="seat-floor" type="checkbox" value="1F"> 1F</label><label><input class="seat-floor" type="checkbox" value="2F"> 2F</label><label><input class="seat-floor" type="checkbox" value="3F"> 3F</label><label><input class="seat-floor" type="checkbox" value="4F"> 4F</label><label>区域<input id="seatAreas" placeholder="F1-F20, 201-230"></label><label class="toggle"><input id="requireContiguous" type="checkbox"> 连座要求</label></fieldset>
+    <div class="grid"><label>购买数量<select id="quantity"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></label><label>指定排数<div class="range"><input id="rowStart" type="number" min="1" placeholder="5"><b>–</b><input id="rowEnd" type="number" min="1" placeholder="15"></div></label></div>
+    <div class="grid"><label>最低价格<input id="priceMin" type="number" min="0" placeholder="例如 80000"></label><label>最高价格<input id="priceMax" type="number" min="0" placeholder="例如 180000"></label></div>
+    <fieldset><legend>优先策略</legend><label><input name="strategy" value="stage" type="radio"> 最近舞台</label><label><input name="strategy" value="center" type="radio" checked> 中间位置</label><label><input name="strategy" value="contiguous" type="radio"> 连座优先</label><label><input name="strategy" value="coordinate" type="radio"> 坐标优先</label></fieldset>
+    <div class="grid"><label>目标 X 坐标<input id="targetX" type="number" min="0" placeholder="座位图 X"></label><label>目标 Y 坐标<input id="targetY" type="number" min="0" placeholder="座位图 Y"></label></div>
+    <div class="grid settings-grid"><label>点击等待时间<select id="waitTime"><option value="400">0.4 秒</option><option value="800">0.8 秒</option><option value="1200">1.2 秒</option><option value="1800">1.8 秒</option></select></label><label class="toggle"><input id="autoClick" type="checkbox"><span></span> 自动点击匹配区域</label><label class="toggle"><input id="autoSelectSeats" type="checkbox"><span></span> 自动点击座位</label><label class="toggle"><input id="autoRotate" type="checkbox"><span></span> 自动换区域</label><label>最大循环次数<input id="maxCycles" type="number" min="1" max="100" value="20"></label></div>
+    <fieldset class="scan-profile"><legend>检测策略</legend><label><input name="scanProfile" value="stable" type="radio"> 稳定模式 <small>5–8 秒</small></label><label><input name="scanProfile" value="balanced" type="radio" checked> 平衡模式 <small>2.5–4.5 秒</small></label><label><input name="scanProfile" value="fast" type="radio"> 快速模式 <small>2–3 秒</small></label></fieldset>
+    <label>基础检测间隔 <output id="scanIntervalValue">3000 ms</output><input id="scanInterval" type="range" min="2000" max="10000" step="500" value="3000"><small>每次扫描会加入 ±500 ms 随机延迟，并在空闲时自动降频</small></label>
+    <label class="toggle"><input id="testMode" type="checkbox" checked><span></span> 测试模式：只识别，不点击</label>
+    <label class="toggle"><input id="debugMode" type="checkbox"><span></span> 调试模式：在页面显示识别元素</label>
+    <p class="notice">不会绕过排队、验证码、登录安全或支付流程。</p>
+    <div class="actions"><button id="start" class="primary">开始监控</button><button id="pause">暂停</button><button id="logs">查看日志</button></div>
+    <div class="analysis-actions"><button id="scanMap">开始扫描座位图</button><button id="exportAnalysis">导出分析结果</button></div>
+    <p id="analysisNotice" class="analysis-notice" aria-live="polite"></p>
+    <section id="logPanel" hidden><h2>最近操作</h2><ol id="logList"></ol></section>
+  </main><script src="../shared/constants.js"></script><script src="popup.js"></script>
+</body></html>
