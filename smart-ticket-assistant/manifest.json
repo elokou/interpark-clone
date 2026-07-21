@@ -25,23 +25,14 @@
       ],
       "js": [
         "shared/constants.js",
-        "content/area-priority-engine.js",
         "content/seat-analyzer.js",
         "content/seat-map-analyzer.js",
-        "content/detection-strategy.js",
-        "content/interpark-adapter.js",
-        "content/area-click-engine.js",
-        "content/area-rotation-engine.js",
-        "content/seat-click-engine.js",
-        "content/seat-search-loop.js",
-        "content/canvas-seat-engine.js",
         "content/page-monitor.js"
       ],
       "css": [
         "content/assistant.css"
       ],
-      "run_at": "document_idle",
-      "all_frames": true
+      "run_at": "document_idle"
     }
   ]
 }
