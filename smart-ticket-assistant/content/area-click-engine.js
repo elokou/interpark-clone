@@ -5,7 +5,6 @@
     element.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
     const view = element.ownerDocument.defaultView || window;
     ['mousedown', 'mouseup', 'click'].forEach((type) => element.dispatchEvent(new MouseEvent(type, { bubbles: true, cancelable: true, composed: true, view, button: 0, buttons: type === 'mousedown' ? 1 : 0 })));
-    try { element.click?.(); } catch { /* Dispatched pointer events remain the primary area-click path. */ }
     return { ok: true, label: (element.innerText || element.getAttribute('aria-label') || element.title || '').trim() };
   }
   globalThis.STAAreaClickEngine = Object.freeze({ click, isClickable: (element) => !unavailable(element) });

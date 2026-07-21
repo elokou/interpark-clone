@@ -23,7 +23,7 @@
       return { action: 'rotate', candidate, currentArea, cooldown, failureCount };
     }
     function clickedFailed() { lastAttemptAt = Date.now(); failureCount += 1; }
-    function snapshot() { return { currentArea, nextArea: candidates[index % Math.max(candidates.length, 1)]?.label || null, failureCount, rotationCount, seatFoundAt, candidateCount: candidates.length, pauseUntil, maxCycles }; }
+    function snapshot() { return { currentArea, nextArea: candidates[index % Math.max(candidates.length, 1)]?.label || null, failureCount, rotationCount, seatFoundAt, candidateCount, pauseUntil, maxCycles }; }
     return { configure, next, clickedFailed, snapshot };
   }
   globalThis.STAAreaRotationEngine = Object.freeze({ create });

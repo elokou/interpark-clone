@@ -28,9 +28,6 @@
     const minX = Math.min(...xs), maxX = Math.max(...xs), minY = Math.min(...ys), maxY = Math.max(...ys);
     const centerX = (minX + maxX) / 2;
     const xSpan = Math.max(maxX - minX, 1), ySpan = Math.max(maxY - minY, 1);
-    const targetX = settings.targetX == null ? centerX : Number(settings.targetX);
-    const targetY = settings.targetY == null ? minY : Number(settings.targetY);
-    const maxTargetDistance = Math.max(Math.hypot(maxX - targetX, maxY - targetY), Math.hypot(minX - targetX, minY - targetY), 1);
     const rows = new Map();
     available.forEach((seat) => {
       const key = seat.row ? `row-${seat.row}` : `y-${Math.round(seat.y / 18)}`;
@@ -51,15 +48,12 @@
     const ranked = available.map((seat) => {
       const stageScore = 1 - clamp((seat.y - minY) / ySpan);
       const centerScore = 1 - clamp(Math.abs(seat.x - centerX) / (xSpan / 2 || 1));
-      const coordinateScore = 1 - clamp(Math.hypot(seat.x - targetX, seat.y - targetY) / maxTargetDistance);
       const contiguousScore = contiguous.has(seat) ? 1 : 0;
       const score = settings.strategy === 'stage'
         ? stageScore * 70 + centerScore * 20 + contiguousScore * 10
         : settings.strategy === 'contiguous'
           ? contiguousScore * 65 + centerScore * 20 + stageScore * 15
-          : settings.strategy === 'coordinate'
-            ? coordinateScore * 70 + centerScore * 15 + stageScore * 15
-            : centerScore * 65 + stageScore * 25 + contiguousScore * 10;
+          : centerScore * 65 + stageScore * 25 + contiguousScore * 10;
       return { ...seat, score: Math.round(score) };
     }).sort((a, b) => b.score - a.score);
 
