@@ -1,0 +1,47 @@
+{
+  "manifest_version": 3,
+  "name": "Smart Ticket Assistant",
+  "version": "1.0.0",
+  "description": "A user-controlled ticket-page monitoring and seat-selection assistant.",
+  "permissions": [
+    "storage",
+    "notifications",
+    "activeTab",
+    "tabs",
+    "downloads"
+  ],
+  "action": {
+    "default_title": "Smart Ticket Assistant",
+    "default_popup": "popup/popup.html"
+  },
+  "background": {
+    "service_worker": "background/service-worker.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "shared/constants.js",
+        "content/area-priority-engine.js",
+        "content/seat-analyzer.js",
+        "content/seat-map-analyzer.js",
+        "content/detection-strategy.js",
+        "content/interpark-adapter.js",
+        "content/area-click-engine.js",
+        "content/area-rotation-engine.js",
+        "content/seat-click-engine.js",
+        "content/seat-search-loop.js",
+        "content/canvas-seat-engine.js",
+        "content/page-monitor.js"
+      ],
+      "css": [
+        "content/assistant.css"
+      ],
+      "run_at": "document_idle",
+      "all_frames": true
+    }
+  ]
+}
