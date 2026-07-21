@@ -25,7 +25,12 @@ public enum GeneralErrorCode implements Code {
     MISSING_REQUEST_PARAMETER(400, "필수 요청 파라미터가 누락되었습니다."),
     INVALID_REQUEST_BODY(400, "요청 본문이 올바르지 않습니다."),
     TYPE_MISMATCH(400, "요청 값의 타입이 올바르지 않습니다."),
-    UNSUPPORTED_OPERATION(400, "지원하지 않는 요청입니다.");
+    UNSUPPORTED_OPERATION(400, "지원하지 않는 요청입니다."),
+
+    // 인증/인가
+    TOKEN_EXPIRED(401, "토큰이 만료되었습니다."),
+    TOKEN_INVALID(401, "유효하지 않은 토큰입니다."),
+    TOKEN_EMPTY(401, "토큰이 비어 있습니다.");
 
     private final int statusCode;
     private final String message;

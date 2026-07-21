@@ -6,6 +6,7 @@ import com.interpark_clone.global.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -38,15 +39,33 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(errorCode.getStatusCode()).body(Response.fail(errorCode));
     }
 
+    // JWT 인증 예외
+    @ExceptionHandler(JwtAuthenticationException.class)
+    public ResponseEntity<Response<Void>> handleJwtAuthenticationException(JwtAuthenticationException e) {
+        GeneralErrorCode errorCode = e.getErrorCode();
+        log.warn("JwtAuthenticationException: {} - {}", errorCode.name(), e.getMessage());
+
+        return ResponseEntity.status(errorCode.getStatusCode()).body(Response.fail(errorCode));
+    }
+
     // ==================== Spring MVC 예외 ====================
 
     // @Valid 검증 실패
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Response<Void>> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         GeneralErrorCode errorCode = GeneralErrorCode.VALIDATION_ERROR;
-        log.warn("MethodArgumentNotValidException: {}", e.getMessage());
 
-        return ResponseEntity.status(errorCode.getStatusCode()).body(Response.fail(errorCode));
+        // 유효성 검증 메시지
+        String message = e.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .findFirst()
+                .map(FieldError::getDefaultMessage)
+                .orElse(errorCode.getMessage());
+
+        log.warn("MethodArgumentNotValidException: {}", message);
+
+        return ResponseEntity.status(errorCode.getStatusCode()).body(Response.fail(errorCode, message));
     }
 
     // 필수 요청 파라미터 누락

@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum SuccessCode implements Code {
 
+    HEALTH_CHECK_SUCCESS(200, "헬스 체크 성공"),
     GET_SUCCESS(200, "조회 성공"),
     INSERT_SUCCESS(201, "삽입 성공"),
     UPDATE_SUCCESS(200, "업데이트 성공"),
