@@ -35,14 +35,9 @@
   function analyzeDocument() {
     const canvases = [...document.querySelectorAll('canvas')].map(inspectCanvas);
     const svgs = [...document.querySelectorAll('svg')];
-    const svgSeats = [...document.querySelectorAll('svg rect, svg circle, svg path')].filter((element) => {
-      const rect = element.getBoundingClientRect();
-      const style = getComputedStyle(element);
-      return rect.width >= 4 && rect.width <= 72 && rect.height >= 4 && rect.height <= 72 && style.fill !== 'none' && style.pointerEvents !== 'none';
-    }).map((element) => { const rect = element.getBoundingClientRect(); return { element, iframe: document.location.href, x: Math.round(rect.left + rect.width / 2), y: Math.round(rect.top + rect.height / 2), row: Math.round((rect.top + rect.height / 2) / 14), col: Math.round((rect.left + rect.width / 2) / 14), color: getComputedStyle(element).fill, tag: element.tagName.toLowerCase() }; });
     const frames = [...document.querySelectorAll('iframe')];
     const imageMaps = [...document.querySelectorAll('map, img[usemap]')];
-    return { canvases, svgCount: svgs.length, svgSeats, iframeCount: frames.length, imageMapCount: imageMaps.length };
+    return { canvases, svgCount: svgs.length, iframeCount: frames.length, imageMapCount: imageMaps.length };
   }
   globalThis.STASeatMapAnalyzer = Object.freeze({ analyzeDocument, captureCanvas });
 })();
